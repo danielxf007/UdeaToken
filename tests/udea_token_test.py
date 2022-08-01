@@ -76,10 +76,3 @@ def test_transfer(udea_token):
     expected_account_to_balance = 100000
     assert (udea_token.balanceOf(accounts[2]) == expected_account_from_balance and
              udea_token.balanceOf(accounts[3]) == expected_account_to_balance)
-
-    
-    
-
-
-
-
