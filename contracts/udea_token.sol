@@ -115,7 +115,7 @@ contract UdeaToken is ERC20 {
     }
 
     /**
-     * @dev Exchanges an amount of  wei for Udea.
+     * @dev Exchanges an amount of  wei for Udea and returns how many Udea was exchanged and how many wei was left.
      *
      * An account can exchange atmost one million Udea.
      *
@@ -130,6 +130,7 @@ contract UdeaToken is ERC20 {
     function exchangeWeiToUdea(address account, address change_target)
         external
         payable
+        returns(uint256, uint256)
     {
         (uint256 udea_amount, uint256 wei_left) = convertWeiToUdea(msg.value);
         require(amountOnRange(udea_amount, min_token_amount, max_token_amount), err_outside_limit);
@@ -139,6 +140,7 @@ contract UdeaToken is ERC20 {
             (bool sent, ) = beneficiary.call{value: wei_left}("");
             require(sent, "Failed to send Ether");
         }
+        return (udea_amount, wei_left);
     }
 
     /**
@@ -157,7 +159,7 @@ contract UdeaToken is ERC20 {
     }
 
     /**
-     * @dev Exchanges Udea for wei.
+     * @dev Exchanges Udea for wei and returns how many wei was given for the Udea.
      *
      * If the caller tries to exchange more than one million Udea or doesn't have
      * the required balance, then the transaction will fail.
@@ -170,7 +172,8 @@ contract UdeaToken is ERC20 {
      * - `amount` has to be a Udea quantity.
     */  
     function exchangeUdeaToWei(uint256 amount)
-        external    
+        external
+        returns(uint256)
     {
         require(amountOnRange(amount, min_token_amount, max_token_amount), err_outside_limit);
         address account = msg.sender;       
@@ -179,7 +182,8 @@ contract UdeaToken is ERC20 {
         uint256 wei_exchange = convertUdeaToWei(amount);
         (bool sent, ) = beneficiary.call{value: wei_exchange}("");
         require(sent, "Failed to send Ether");
-        _burn(account, amount); 
+        _burn(account, amount);
+        return wei_exchange;
     }
 
     /**
@@ -205,3 +209,4 @@ contract UdeaToken is ERC20 {
     }
 
 }
+
