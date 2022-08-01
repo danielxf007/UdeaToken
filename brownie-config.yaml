@@ -2,6 +2,10 @@ dotenv: .env
 
 wallets:
   from_key: ${PRIVATE_KEY}
+  
+wallet_addr:
+  wallet1: "0x035f4563c30bb14dBfDC454361E511731D4BbFe5"
+  wallet2: "0xc6151b0152c77D03843030E6084ef37bC6cFc69b"
 
-networks:
-  default: ganache-local
+deployed_contract:
+  address: ${DEPLOYED_CONTRACT_ADDR}
